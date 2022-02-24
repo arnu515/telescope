@@ -1,0 +1,44 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Integration {
+  id        String   @id @default(cuid())
+  name      String
+  baseUrl   String
+  key       String
+  ownerId   String   @map("owner_id")
+  createdAt DateTime @default(now())
+
+  owner       Developer                @relation(name: "IntegrationDevelopers", fields: [ownerId], references: [id])
+  credentials IntegrationCredentials[] @relation(name: "IntegrationIntegrationCredentials")
+}
+
+model Developer {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  avatarUrl String
+  username  String
+  githubId  String   @map("github_id")
+  createdAt DateTime @default(now())
+
+  integrations Integration[] @relation(name: "IntegrationDevelopers")
+}
+
+model IntegrationCredentials {
+  id            String   @id
+  integrationId String   @map("integration_id")
+  secret        String
+  createdAt     DateTime @default(now())
+
+  integration Integration @relation(name: "IntegrationIntegrationCredentials", fields: [integrationId], references: [id])
+}
