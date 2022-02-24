@@ -1,0 +1,23 @@
+{
+  "name": "backend",
+  "description": "Backend for Telescope",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p .",
+    "dev": "ts-node-dev --rs --respawn --exit-child src/index.ts",
+    "format": "prettier --write . && prisma format",
+    "prisma": "prisma",
+    "gen:prisma": "prisma generate",
+    "start": "node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.21",
+    "@vtex/prettier-config": "^1.0.0",
+    "eslint": "^8.9.0",
+    "eslint-config-vtex": "^14.1.2",
+    "prettier": "^2.5.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.5"
+  }
+}
