@@ -12,7 +12,7 @@ datasource db {
 
 model Integration {
   id        String   @id
-  name      String   @unique
+  name      String
   baseUrl   String
   key       String
   ownerId   String   @map("owner_id")
