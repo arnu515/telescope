@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Integration {
-  id        String   @id @default(cuid())
+  id        String   @id
   name      String   @unique
   baseUrl   String
   key       String
