@@ -12,6 +12,7 @@
     "start": "node dist/index.js"
   },
   "devDependencies": {
+    "@arnu515/tiny-invariant": "^1.0.0",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "@types/jsonwebtoken": "^8.5.8",
@@ -32,7 +33,6 @@
     "express": "^4.17.3",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
-    "morgan": "^1.10.0",
-    "tiny-invariant": "^1.2.0"
+    "morgan": "^1.10.0"
   }
 }
