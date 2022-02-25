@@ -27,7 +27,7 @@ model Developer {
   name      String
   email     String   @unique
   avatarUrl String
-  username  String   @unique
+  username  String
   githubId  String   @unique @map("github_id")
   createdAt DateTime @default(now())
 
