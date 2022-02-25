@@ -12,7 +12,7 @@ datasource db {
 
 model Integration {
   id        String   @id @default(cuid())
-  name      String
+  name      String   @unique
   baseUrl   String
   key       String
   ownerId   String   @map("owner_id")
@@ -25,10 +25,10 @@ model Integration {
 model Developer {
   id        String   @id @default(cuid())
   name      String
-  email     String
+  email     String   @unique
   avatarUrl String
-  username  String
-  githubId  String   @map("github_id")
+  username  String   @unique
+  githubId  String   @unique @map("github_id")
   createdAt DateTime @default(now())
 
   integrations Integration[] @relation(name: "IntegrationDevelopers")
