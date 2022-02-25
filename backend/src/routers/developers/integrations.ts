@@ -31,6 +31,10 @@ router.get("/:id", devAuth(), async (req, res) => {
 	let integration = await prisma.integration.findUnique({
 		where: {
 			id: req.params.id
+		},
+		include: {
+			credentials: true,
+			owner: true
 		}
 	})
 
