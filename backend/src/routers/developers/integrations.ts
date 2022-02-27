@@ -13,15 +13,6 @@ import crypto from "crypto"
 
 const router = Router()
 
-router.get("/public", async (_, res) => {
-	const integrations = await prisma.integration.findMany({
-		where: {
-			isVerified: true
-		}
-	})
-	res.json({ integrations })
-})
-
 router.get("/", devAuth(), async (req, res) => {
 	res.json({
 		integrations: await prisma.integration.findMany({
