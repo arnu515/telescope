@@ -22,6 +22,7 @@ model Integration {
 
   owner       Developer                @relation(name: "IntegrationDevelopers", fields: [ownerId], references: [id])
   credentials IntegrationCredentials[] @relation(name: "IntegrationIntegrationCredentials")
+  calls       Call[]                   @relation(name: "IntegrationCalls")
 
   @@map("integrations")
 }
@@ -49,4 +50,19 @@ model IntegrationCredentials {
   integration Integration @relation(name: "IntegrationIntegrationCredentials", fields: [integrationId], references: [id])
 
   @@map("credentials")
+}
+
+model Call {
+  id              String    @id @default(cuid())
+  fromId          String    @map("from_id")
+  toId            String    @map("to_id")
+  integrationId   String    @map("integration_id")
+  integrationData Json      @map("data")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  isActive        Boolean   @default(false) @map("is_active")
+  expiresAt       DateTime? @map("expires_at")
+
+  integration Integration @relation(name: "IntegrationCalls", fields: [integrationId], references: [id])
+
+  @@map("calls")
 }
