@@ -46,6 +46,7 @@ model IntegrationCredentials {
   integrationId String   @map("integration_id")
   secret        String
   createdAt     DateTime @default(now()) @map("created_at")
+  uses          Int      @default(0)
 
   integration Integration @relation(name: "IntegrationIntegrationCredentials", fields: [integrationId], references: [id])
 
