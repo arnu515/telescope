@@ -59,6 +59,10 @@ router.post("/", devAuth(), async (req, res) => {
 			baseUrl: joi
 				.string()
 				.required()
+				.uri({ scheme: ["https", "http"], allowRelative: false }),
+			addUrl: joi
+				.string()
+				.required()
 				.uri({ scheme: ["https", "http"], allowRelative: false })
 		})
 		.validate(req.body)
@@ -70,7 +74,7 @@ router.post("/", devAuth(), async (req, res) => {
 		return
 	}
 
-	const { name, baseUrl } = value
+	const { name, baseUrl, addUrl } = value
 
 	const integration = await prisma.integration.create({
 		data: {
@@ -80,6 +84,7 @@ router.post("/", devAuth(), async (req, res) => {
 				nanoid(6),
 			name,
 			baseUrl,
+			addUrl,
 			key: nanoid(64),
 			owner: {
 				connect: {
@@ -101,6 +106,10 @@ router.put("/:id", devAuth(), async (req, res) => {
 			baseUrl: joi
 				.string()
 				.required()
+				.uri({ scheme: ["https", "http"], allowRelative: false }),
+			addUrl: joi
+				.string()
+				.required()
 				.uri({ scheme: ["https", "http"], allowRelative: false })
 		})
 		.validate(req.body)
@@ -112,7 +121,7 @@ router.put("/:id", devAuth(), async (req, res) => {
 		return
 	}
 
-	const { name, baseUrl } = value
+	const { name, baseUrl, addUrl } = value
 	const id = req.params.id
 
 	let integration = await prisma.integration.findUnique({
@@ -135,7 +144,8 @@ router.put("/:id", devAuth(), async (req, res) => {
 		where: { id },
 		data: {
 			name,
-			baseUrl
+			baseUrl,
+			addUrl
 		}
 	})
 
