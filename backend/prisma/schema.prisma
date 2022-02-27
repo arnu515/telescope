@@ -13,34 +13,40 @@ datasource db {
 model Integration {
   id         String   @id
   name       String
-  baseUrl    String
-  addUrl     String
+  baseUrl    String   @map("base_url")
+  addUrl     String   @map("add_url")
   key        String
   ownerId    String   @map("owner_id")
   isVerified Boolean  @default(false) @map("is_verified")
-  createdAt  DateTime @default(now())
+  createdAt  DateTime @default(now()) @map("created_at")
 
   owner       Developer                @relation(name: "IntegrationDevelopers", fields: [ownerId], references: [id])
   credentials IntegrationCredentials[] @relation(name: "IntegrationIntegrationCredentials")
+
+  @@map("integrations")
 }
 
 model Developer {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
-  avatarUrl String
+  avatarUrl String   @map("avatar_url")
   username  String
   githubId  String   @unique @map("github_id")
-  createdAt DateTime @default(now())
+  createdAt DateTime @default(now()) @map("created_at")
 
   integrations Integration[] @relation(name: "IntegrationDevelopers")
+
+  @@map("developers")
 }
 
 model IntegrationCredentials {
   id            String   @id
   integrationId String   @map("integration_id")
   secret        String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime @default(now()) @map("created_at")
 
   integration Integration @relation(name: "IntegrationIntegrationCredentials", fields: [integrationId], references: [id])
+
+  @@map("credentials")
 }
