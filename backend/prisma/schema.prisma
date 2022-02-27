@@ -11,12 +11,14 @@ datasource db {
 }
 
 model Integration {
-  id        String   @id
-  name      String
-  baseUrl   String
-  key       String
-  ownerId   String   @map("owner_id")
-  createdAt DateTime @default(now())
+  id         String   @id
+  name       String
+  baseUrl    String
+  addUrl     String
+  key        String
+  ownerId    String   @map("owner_id")
+  isVerified Boolean  @default(false) @map("is_verified")
+  createdAt  DateTime @default(now())
 
   owner       Developer                @relation(name: "IntegrationDevelopers", fields: [ownerId], references: [id])
   credentials IntegrationCredentials[] @relation(name: "IntegrationIntegrationCredentials")
