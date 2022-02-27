@@ -52,7 +52,7 @@ export function devAuth(authRequired = true) {
 }
 
 router.get("/github/callback", async (req, res) => {
-	const frontend = process.env.SELF_URL || "http://localhost:3000"
+	const frontend = process.env.APP_URL || "http://localhost:3000"
 	const { error: e1, value } = joi
 		.object({
 			state: joi.string().required().length(32).trim(),

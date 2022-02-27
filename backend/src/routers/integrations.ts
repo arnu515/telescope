@@ -41,7 +41,7 @@ router.get("/public/:id/add", async (req, res) => {
 			status: 404,
 			error: "Integration not found",
 			error_description: "This integration could not be found",
-			frontend: process.env.SELF_URL || "http://localhost:3000"
+			frontend: process.env.APP_URL || "http://localhost:3000"
 		})
 	} else res.redirect(integration.addUrl)
 })
