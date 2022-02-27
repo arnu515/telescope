@@ -9,6 +9,7 @@ import {
 	colors,
 	animals
 } from "unique-names-generator"
+import crypto from "crypto"
 
 const router = Router()
 
@@ -144,7 +145,7 @@ router.put("/:id", devAuth(), async (req, res) => {
 })
 
 router.delete("/:id", devAuth(), async (req, res) => {
-	let integration = await prisma.integration.findUnique({
+	const integration = await prisma.integration.findUnique({
 		where: {
 			id: req.params.id
 		}
@@ -167,6 +168,86 @@ router.delete("/:id", devAuth(), async (req, res) => {
 	})
 
 	res.json({ integration })
+})
+
+router.post("/:id/credentials", devAuth(), async (req, res) => {
+	const integration = await prisma.integration.findUnique({
+		where: {
+			id: req.params.id
+		}
+	})
+
+	if (!integration) {
+		res.status(404).json({ error: "Integration not found" })
+		return
+	}
+
+	if (integration.ownerId !== (req as any).dev.id) {
+		res.status(403).json({ error: "Integration not owned by you" })
+		return
+	}
+
+	let secret = nanoid(16)
+	secret += "-" + crypto.createHash("md5").update(secret).digest("hex")
+	secret += "-" + crypto.createHash("sha256").update(secret).digest("hex")
+	const credentials = await prisma.integrationCredentials.create({
+		data: {
+			id: nanoid(16),
+			secret: crypto.createHash("sha256").update(secret).digest("hex"),
+			integration: {
+				connect: {
+					id: integration.id
+				}
+			}
+		},
+		include: {
+			integration: true
+		}
+	})
+
+	res.json({ credentials, secret })
+})
+
+router.delete("/:id/credentials/:credentialId", devAuth(), async (req, res) => {
+	const integration = await prisma.integration.findUnique({
+		where: {
+			id: req.params.id
+		}
+	})
+
+	if (!integration) {
+		res.status(404).json({ error: "Integration not found" })
+		return
+	}
+
+	if (integration.ownerId !== (req as any).dev.id) {
+		res.status(403).json({ error: "Integration not owned by you" })
+		return
+	}
+
+	const creds = await prisma.integrationCredentials.findUnique({
+		where: {
+			id: req.params.credentialId
+		}
+	})
+
+	if (!creds) {
+		res.status(404).json({ error: "Credentials not found" })
+		return
+	}
+
+	if (creds.integrationId !== integration.id) {
+		res.status(403).json({ error: "Credentials not owned by this integration" })
+		return
+	}
+
+	await prisma.integrationCredentials.delete({
+		where: {
+			id: req.params.credentialId
+		}
+	})
+
+	res.json({ credentials: creds })
 })
 
 export default router
