@@ -3,6 +3,9 @@ import prisma from "../lib/prisma"
 import { integrationAuth } from "./developers/integrations"
 import joi from "joi"
 import { stringify } from "qs"
+import { customAlphabet } from "nanoid"
+import redis from "../lib/redis"
+import crypto from "crypto"
 
 const router = Router()
 
@@ -118,6 +121,53 @@ router.all("/calls/:id/error", integrationAuth(), async (req, res) => {
 		url:
 			`${process.env.APP_URL}/calls/${call.id}?` +
 			stringify({ error, error_description })
+	})
+})
+
+router.all("/calls/:id/auth", integrationAuth(), async (req, res) => {
+	const call = await getCall(req.params.id)
+
+	if (!call) {
+		res.status(404).json({
+			error: "Call not found",
+			error_description: "This call could not be found"
+		})
+		return
+	}
+
+	const { error: e, value } = joi
+		.object({
+			nickname: joi.string().default("").max(255),
+			avatarUrl: joi
+				.string()
+				.uri({ scheme: "https" })
+				.default("https://i.imgur.com/GhJz0Ks.png")
+		})
+		.validate(req.body || req.query)
+
+	if (e) {
+		res.status(400).json({
+			error: "Invalid body",
+			error_description: e.message
+		})
+		return
+	}
+
+	const auth_token = customAlphabet(
+		"abcdefghijklmnopqrstuvwxyz0123456789",
+		64
+	)()
+
+	await redis.hset(
+		"call:auth",
+		crypto.createHash("sha256").update(auth_token).digest("hex"),
+		call.id
+	)
+
+	res.json({
+		url:
+			`${process.env.APP_URL}/calls/${call.id}?` +
+			stringify({ ...value, auth_token })
 	})
 })
 
