@@ -351,4 +351,17 @@ serve(async (req) => {
   // console.log(res);
   console.log("Time taken: " + (Date.now() - time));
   return res;
-}, { port });
+}, {
+  port,
+  onError: (err) => {
+    console.log(err);
+    if (err instanceof TelescopeError) {
+      return json(err.body, { status: err.status });
+    } else {
+      return json({
+        error: "An error occured",
+        error_description: (err as Error).message,
+      }, { status: 500 });
+    }
+  },
+});
