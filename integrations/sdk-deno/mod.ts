@@ -1,3 +1,3 @@
-import {Telescope} from "./src/index.ts"
+import { Telescope, TelescopeError } from "./src/index.ts";
 
-export {Telescope as default}
+export { Telescope as default, TelescopeError };
