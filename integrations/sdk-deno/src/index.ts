@@ -100,4 +100,31 @@ export class Telescope {
       );
     }
   }
+
+  public async getAuthUrl(
+    callId: string,
+    body: { nickname?: string; avatarUrl?: string } = {},
+  ) {
+    const res = await fetch(
+      this.getUrl(`/api/integrations/calls/${callId}/auth`),
+      {
+        method: "POST",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": this.authHeader,
+        },
+      },
+    );
+    const data = await res.json();
+    if (res.ok) {
+      return data.url;
+    } else {
+      throw new TelescopeError(
+        "An error occured while fetching the error url",
+        data,
+        res.status,
+      );
+    }
+  }
 }
