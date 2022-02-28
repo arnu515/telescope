@@ -330,7 +330,8 @@ const authHandler = async (req: Request) => {
   }
 };
 
-console.log("Starting server on port: 8000");
+const port = parseInt(Deno.env.get("PORT") || "8000");
+console.log("Starting server on port: " + port);
 serve(async (req) => {
   // console.log(req);
   const time = Date.now();
@@ -350,4 +351,4 @@ serve(async (req) => {
   // console.log(res);
   console.log("Time taken: " + (Date.now() - time));
   return res;
-});
+}, { port });
