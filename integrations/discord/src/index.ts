@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.127.0/http/server.ts";
 import { except, i } from "./lib/invariant.ts";
 import slash from "./lib/slash.ts";
+import telescope, { TelescopeError } from "./lib/telescope.ts";
 
 // deno-lint-ignore no-explicit-any
 function json(data: any, init?: ResponseInit) {
@@ -56,15 +57,24 @@ const handler = async (req: Request) => {
     });
   }
 
-  const { type = 0, data = { options: [] } } = JSON.parse(rawBody);
+  const body = JSON.parse(rawBody);
 
-  if (type === 1) {
+  if (body.type === 1) {
     return json({ type: 1 });
   }
 
-  if (type === 2) {
-    console.log({ type, data });
-    return json({ type: 4, data: { content: "Pong" } });
+  if (body.type === 2) {
+    switch (body.data.name) {
+      case "call":
+        return await callCommand(body);
+      default:
+        return json({
+          type: 4,
+          data: {
+            content: "This command has not been implemented yet.",
+          },
+        });
+    }
   }
 
   return new Response(
@@ -78,12 +88,91 @@ const handler = async (req: Request) => {
   );
 };
 
+// deno-lint-ignore no-explicit-any
+const callCommand = async (body: Record<string, any>) => {
+  const fromId = body.member.user.id;
+  const toId = body.data.options[0].value;
+  console.log({ fromId, toId });
+
+  const err1 = await except(() => {
+    i(typeof fromId === "string", "Invalid request");
+    i(typeof toId === "string", "Invalid request");
+    i(fromId !== toId, "You can't call yourself");
+  });
+
+  if (err1) {
+    return json({
+      type: 4,
+      data: {
+        content: `**Invalid request**: ${err1}`,
+      },
+    });
+  }
+
+  try {
+    const call = await telescope.createCall({
+      fromId,
+      toId,
+      data: {},
+    });
+    return json({
+      type: 4,
+      data: {
+        embeds: [
+          {
+            title: "Call placed",
+            description:
+              `The call has been placed between <@${fromId}> and <@${toId}>`,
+            url: "https://telescope.gq/call/" + call.id,
+            fields: [
+              {
+                name: "Call URL",
+                value: "https://telescope.gq/call/" + call.id,
+                inline: true,
+              },
+            ],
+            footer: {
+              text:
+                "This call will end itself if there is no activity in 15 minutes.",
+            },
+          },
+        ],
+      },
+    });
+  } catch (e) {
+    const error: TelescopeError = e;
+    return json({
+      type: 4,
+      data: {
+        embeds: [
+          {
+            title: "An error occured",
+            description: error.message,
+            fields: [
+              {
+                name: "Error",
+                value: error.body.error,
+                inline: true,
+              },
+              {
+                name: "Error Description",
+                value: error.body.error_description,
+                inline: true,
+              },
+            ],
+          },
+        ],
+      },
+    });
+  }
+};
+
 console.log("Starting server on port: 8000");
 serve(async (req) => {
-  console.log(req);
+  // console.log(req);
   const time = Date.now();
   const res = await handler(req);
-  console.log(res);
+  // console.log(res);
   console.log("Time taken: " + (Date.now() - time));
   return res;
 });
