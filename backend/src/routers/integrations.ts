@@ -18,12 +18,14 @@ router.get("/public", async (_, res) => {
 	res.json({ integrations })
 })
 
-router.get("/public/:id", async (req, res) => {
+router.get(["/:id", "/public/:id"], async (req, res) => {
 	const { id } = req.params
 	const integration = await prisma.integration.findFirst({
 		where: {
-			id,
-			isVerified: true
+			id
+		},
+		include: {
+			owner: true
 		}
 	})
 	if (!integration) {
