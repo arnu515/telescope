@@ -1,4 +1,4 @@
-import { Router } from "express"
+import { NextFunction, Request, Response, Router } from "express"
 import prisma from "../../lib/prisma"
 import { devAuth } from "./auth"
 import joi from "joi"
@@ -10,17 +10,45 @@ import {
 	animals
 } from "unique-names-generator"
 import crypto from "crypto"
+import i from "@arnu515/tiny-invariant"
 
 const router = Router()
 
-router.get("/public", async (_, res) => {
-	const integrations = await prisma.integration.findMany({
-		where: {
-			isVerified: true
+export function integrationAuth(required = true) {
+	return async (req: Request, res: Response, next: NextFunction) => {
+		try {
+			const basicAuth = req.headers.authorization?.split(" ")?.[1]
+			i(!!basicAuth, "Basic auth header is required")
+			const decodedBAuth = Buffer.from(basicAuth, "base64")
+				.toString("utf-8")
+				.split(":")
+			const clientId = decodedBAuth[0]
+			const clientSecret = decodedBAuth.slice(1).join(":")
+			i(!!clientId && !!clientSecret, "Invalid basic auth header")
+			const creds = await prisma.integrationCredentials.findFirst({
+				where: {
+					id: clientId,
+					secret: crypto.createHash("sha256").update(clientSecret).digest("hex")
+				},
+				include: { integration: { include: { owner: true } } }
+			})
+			i(!!creds, "Invalid credentials")
+			;(req as any).integration = creds.integration
+			await prisma.integrationCredentials.update({
+				where: { id: clientId },
+				data: { uses: { increment: 1 } }
+			})
+			next()
+		} catch (e) {
+			if (required) {
+				return res
+					.status(401)
+					.json({ error: "Unauthorized", error_description: e.message })
+			}
+			return next()
 		}
-	})
-	res.json({ integrations })
-})
+	}
+}
 
 router.get("/", devAuth(), async (req, res) => {
 	res.json({

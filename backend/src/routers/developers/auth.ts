@@ -52,7 +52,7 @@ export function devAuth(authRequired = true) {
 }
 
 router.get("/github/callback", async (req, res) => {
-	const frontend = process.env.SELF_URL || "http://localhost:3000"
+	const frontend = process.env.APP_URL || "http://localhost:3000"
 	const { error: e1, value } = joi
 		.object({
 			state: joi.string().required().length(32).trim(),
@@ -61,7 +61,7 @@ router.get("/github/callback", async (req, res) => {
 		.validate(req.query)
 
 	if (e1) {
-		res.status(422).render("connect_error", {
+		res.status(422).render("error", {
 			status: 500,
 			error: "Invalid query string",
 			error_description: e1.message + ". Please try again.",
@@ -72,7 +72,7 @@ router.get("/github/callback", async (req, res) => {
 
 	// verify state
 	if (!(await redis.sismember("github:state", value.state))) {
-		res.status(422).render("connect_error", {
+		res.status(422).render("error", {
 			status: 500,
 			error: "Invalid state",
 			error_description: "The state has expired. Please try again.",
@@ -94,7 +94,7 @@ router.get("/github/callback", async (req, res) => {
 
 	if (res1.data.error) {
 		console.log(res1.status, res1.data)
-		res.status(422).render("connect_error", {
+		res.status(422).render("error", {
 			status: res1.status,
 			error: "Failed to get access token",
 			error_description: qs.parse(res1.data).error_description,
@@ -107,7 +107,7 @@ router.get("/github/callback", async (req, res) => {
 
 	// check scope
 	if (!scope.includes("user:email")) {
-		res.status(422).render("connect_error", {
+		res.status(422).render("error", {
 			status: 500,
 			error: "Insufficient scope",
 			error_description: "Insufficient scope. Please try again.",
@@ -124,7 +124,7 @@ router.get("/github/callback", async (req, res) => {
 
 	if (res2.status !== 200) {
 		console.log(res2.status, res2.data)
-		res.status(422).render("connect_error", {
+		res.status(422).render("error", {
 			status: res2.status,
 			error: "Failed to get user info",
 			error_description: res2.data.message,
@@ -142,7 +142,7 @@ router.get("/github/callback", async (req, res) => {
 		})
 		if (res3.status !== 200) {
 			console.log(res3.status, res3.data)
-			res.status(422).render("connect_error", {
+			res.status(422).render("error", {
 				status: res3.status,
 				error: "Failed to get user email",
 				error_description: res3.data.message,
@@ -152,7 +152,7 @@ router.get("/github/callback", async (req, res) => {
 		}
 		userEmail = res3.data.find((email: any) => email.primary).email
 		if (!userEmail) {
-			res.status(422).render("connect_error", {
+			res.status(422).render("error", {
 				status: 403,
 				error: "Failed to get email",
 				error_description:

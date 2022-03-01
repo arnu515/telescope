@@ -1,6 +1,7 @@
 import type { Router as ExpressRouter } from "express"
 import developersAuth from "./developers/auth"
 import developersIntegrations from "./developers/integrations"
+import integrations from "./integrations"
 
 interface Router {
 	router: ExpressRouter
@@ -15,6 +16,10 @@ const routers: Router[] = [
 	{
 		router: developersIntegrations,
 		path: "/api/developers/integrations"
+	},
+	{
+		router: integrations,
+		path: "/api/integrations"
 	}
 ]
 
