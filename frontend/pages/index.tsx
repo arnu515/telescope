@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const Index: React.FC = () => {
@@ -10,12 +11,12 @@ const Index: React.FC = () => {
             Meetings integrated everywhere
           </p>
           <p className="mt-12 text-center">
-            <a href="/integrations" className="button mr-4 bg-success">
-              Explore integrations
-            </a>
-            <a href="/meeting" className="button bg-gray-500">
-              Connect to a call
-            </a>
+            <Link href="/integrations">
+              <a className="button mr-4 bg-success">Explore integrations</a>
+            </Link>
+            <Link href="/meeting">
+              <a className="button bg-gray-500">Connect to a call</a>
+            </Link>
           </p>
         </div>
       </div>
