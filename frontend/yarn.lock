@@ -435,6 +435,11 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
+iconoir-react@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/iconoir-react/-/iconoir-react-2.1.0.tgz#decfafbdc19851e9e6cc09203ad8550ff6963b86"
+  integrity sha512-PMrSTrTI4iksFrZvPnlQraQdDOE5yEe/Z4O0+v5O7mNbwLFDqCVgtDp6fyR9EDVeIyiPY9/YDfq++eII+DH4rw==
+
 import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
