@@ -1,6 +1,6 @@
 import axios from './axios'
 import type { AxiosResponse } from 'axios'
-import { Integration } from './types'
+import { Developer, Integration } from './types'
 
 export class FetchError extends Error {
   constructor(
@@ -41,4 +41,13 @@ export const integrations = {
     ),
 }
 
-export default { integrations }
+export const developers = {
+  me: (token: string) =>
+    request<{ dev: Developer }>(() =>
+      axios.get('/api/developers/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+    ),
+}
+
+export default { integrations, developers }
