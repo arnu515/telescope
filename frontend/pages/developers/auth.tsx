@@ -20,6 +20,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         data: { dev },
       } = await api.developers.me(token)
       session.dev = dev
+      session.token = token
       return { redirect: { statusCode: 302, destination: '/developers' } }
     } catch (e) {
       console.log(e)
