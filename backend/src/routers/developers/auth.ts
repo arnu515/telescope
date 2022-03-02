@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express"
-import qs from "qs"
+import qs, { stringify } from "qs"
 import redis from "../../lib/redis"
 import { nanoid } from "nanoid"
 import joi from "joi"
@@ -188,7 +188,7 @@ router.get("/github/callback", async (req, res) => {
 
 	const token = await createToken(dev)
 
-	res.status(200).json({ dev, token })
+	res.redirect(process.env.APP_URL + "/developers/auth?" + stringify({ token }))
 })
 
 router.get("/me", devAuth(), (req, res) => {
