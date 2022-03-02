@@ -37,12 +37,12 @@ const Index: React.FC = () => {
           If you're tech savvy enough, you can create your own integration.
         </p>
         <p className="mt-8 text-center">
-          <a href="/developers" className="button mr-4 bg-success">
-            Get started
-          </a>
-          <a href="/developers/docs" className="button bg-gray-500">
-            Read the docs
-          </a>
+          <Link href="/developers">
+            <a className="button mr-4 bg-success">Get started</a>
+          </Link>
+          <Link href="/developers/docs">
+            <a className="button bg-gray-500">Read the docs</a>
+          </Link>
         </p>
       </div>
     </React.Fragment>
