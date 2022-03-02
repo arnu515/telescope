@@ -27,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
   }
 
-  return { props: { dev: session.dev } }
+  return { props: { dev: session.dev ?? null } }
 }
 
 const Auth: React.FC<{ dev: Developer }> = ({ dev }) => {

@@ -8,7 +8,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   if (!session.dev)
     return { redirect: { statusCode: 302, destination: '/developers/auth' } }
 
-  return { props: { dev: session.dev } }
+  return { props: { dev: session.dev ?? null } }
 }
 
 const DevelopersIndex: React.FC<{ dev: Developer }> = ({ dev }) => {
