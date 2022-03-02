@@ -63,7 +63,11 @@ const DevelopersIndex: React.FC<{
         </h2>
         <div className="my-4 mx-auto flex max-w-screen-lg flex-col gap-4 py-12">
           {integrations.map((x, y) => (
-            <IntegrationCard integration={x} key={y} />
+            <IntegrationCard
+              integration={x}
+              key={y}
+              path="/developers/integrations/%id%"
+            />
           ))}
         </div>
       </div>
