@@ -1,3 +1,4 @@
+import { Plus } from 'iconoir-react'
 import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import React from 'react'
@@ -62,6 +63,16 @@ const DevelopersIndex: React.FC<{
           Your integrations
         </h2>
         <div className="my-4 mx-auto flex max-w-screen-lg flex-col gap-4 py-12">
+          <div className="flex flex-col gap-2 rounded-xl bg-[#333] px-8 py-4">
+            <p className="flex items-center justify-between text-2xl font-medium">
+              Create integration
+              <Link href="/developers/integrations/create">
+                <a className="button bg-success text-base font-normal">
+                  <Plus /> Create
+                </a>
+              </Link>
+            </p>
+          </div>
           {integrations.map((x, y) => (
             <IntegrationCard
               integration={x}
