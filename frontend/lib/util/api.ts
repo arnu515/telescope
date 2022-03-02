@@ -48,6 +48,14 @@ export const developers = {
         headers: { Authorization: `Bearer ${token}` },
       })
     ),
+  integrations: {
+    all: (token: string) =>
+      request<{ integrations: Integration[] }>(() =>
+        axios.get('/api/developers/integrations', {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      ),
+  },
 }
 
 export default { integrations, developers }
