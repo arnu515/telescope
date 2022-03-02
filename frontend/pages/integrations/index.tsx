@@ -2,8 +2,8 @@ import React from 'react'
 import type { GetServerSideProps } from 'next'
 import api from '../../lib/util/api'
 import { Integration } from '../../lib/util/types'
-import { MoreHoriz, Plus } from 'iconoir-react'
 import Link from 'next/link'
+import IntegrationCard from '../../lib/components/IntegrationCard'
 
 export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   const { data } = await api.integrations.public()
@@ -12,31 +12,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
   return {
     props: { integrations: data.integrations },
   }
-}
-
-const IntegrationCard: React.FC<{ integration: Integration }> = ({
-  integration,
-}) => {
-  return (
-    <div className="flex flex-col gap-2 rounded-xl bg-[#333] px-8 py-4">
-      <p className="flex items-center justify-between text-2xl font-medium">
-        {integration.name}
-        <span className="font-mono text-xl font-normal text-gray-500">
-          {integration.id}
-        </span>
-      </p>
-      <p className="mt-4">
-        <a href={integration.addUrl} className="button mr-2 bg-success">
-          <Plus /> Add
-        </a>
-        <Link href={`/integrations/${integration.id}`}>
-          <a className="button bg-gray-500">
-            <MoreHoriz /> Details
-          </a>
-        </Link>
-      </p>
-    </div>
-  )
 }
 
 const IntegrationsIndex: React.FC<{ integrations: Integration[] }> = ({
