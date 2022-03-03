@@ -37,3 +37,8 @@ export type Call = {
   isActive: boolean
   expiresAt: Date | null
 }
+
+export interface ErrorObject {
+  error: string
+  error_description: string
+}
