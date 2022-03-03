@@ -130,13 +130,13 @@ const DevelopersIntegrationsSlug: React.FC<{
             </button>
           </p>
 
-          <h2 className="my-4 text-3xl font-medium">Basic information</h2>
+          <h2 className="mb-4 mt-8 text-3xl font-medium">Basic information</h2>
           <ErrorAlert
             error={formError ?? undefined}
             dismissable
             onDismiss={() => setFormError(null)}
           />
-          <div className="mt-12">
+          <div className="mt-6">
             <p className="mt-4">
               {/* TODO: Extract these to a class (maybe a component) */}
               <label htmlFor="name" className="my-1 block text-lg font-medium">
@@ -229,12 +229,12 @@ const DevelopersIntegrationsSlug: React.FC<{
             </p>
           </div>
         </form>
-        <h2 className="mt-8 mb-4 text-3xl font-medium">Credentials</h2>
+        <h2 className="mt-12 mb-4 text-3xl font-medium">Credentials</h2>
         <p className="my-4 text-xl font-medium">
           Key:{' '}
           <span className="font-mono text-gray-400">{integration.key}</span>
         </p>
-        <h3 className="my-4 text-2xl">Client credentials</h3>
+        <h3 className="mt-8 mb-4 text-2xl">Client credentials</h3>
         <p className="my-4 text-lg">
           Use these credentials to interact with the Telescope API
         </p>
@@ -247,7 +247,7 @@ const DevelopersIntegrationsSlug: React.FC<{
             . It won't be displayed again.
           </div>
         )}
-        <div className="my-4 mx-auto flex max-w-screen-lg flex-col gap-4 py-12">
+        <div className="my-4 mx-auto flex max-w-screen-lg flex-col gap-4">
           <div className="flex flex-col gap-2 rounded-xl bg-[#333] px-8 py-4">
             <p className="flex items-center justify-between text-2xl font-medium">
               Create credentials
