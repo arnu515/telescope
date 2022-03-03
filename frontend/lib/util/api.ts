@@ -61,6 +61,13 @@ export const developers = {
           headers: { Authorization: `Bearer ${token}` },
         })
       ),
+    update: (token: string, id: string, body: any) =>
+      request<{ integration: Integration }>(() =>
+        axios.put('/api/developers/integrations/' + id, {
+          headers: { Authorization: `Bearer ${token}` },
+          data: body,
+        })
+      ),
   },
 }
 
