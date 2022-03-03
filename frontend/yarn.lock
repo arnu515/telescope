@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@arnu515/tiny-invariant@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@arnu515/tiny-invariant/-/tiny-invariant-1.0.0.tgz#0afe2a4553531a9feea65d2bf7b70bc9dd0d85ca"
+  integrity sha512-uM3KHOQ1ADYXfhbWDc4iEZTqyPW5RUAXKD7H7lN5HDzpobycPp9hJRB2GDkSisvsR9s+U5CJM1qoIwOu/e0d3w==
+
 "@babel/code-frame@^7.0.0":
   version "7.16.7"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.16.7.tgz#44416b6bd7624b998f5b1af5d470856c40138789"
@@ -335,7 +340,12 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.10.tgz#2ad3a7bed70f35b965707c092e5f30b327c290e5"
   integrity sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==
 
-debug@^4.3.1, debug@^4.3.3:
+dayjs@^1.10.8:
+  version "1.10.8"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.10.8.tgz#267df4bc6276fcb33c04a6735287e3f429abec41"
+  integrity sha512-wbNwDfBHHur9UOzNUjeKUOJ0fCb0a52Wx0xInmQ7Y8FstyajiV1NmK1e00cxsr9YrE9r7yAChE0VvpuY5Rnlow==
+
+debug@^4.3.1:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
   integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==

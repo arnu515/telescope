@@ -6,7 +6,9 @@
     "start": "next start"
   },
   "dependencies": {
+    "@arnu515/tiny-invariant": "^1.0.0",
     "axios": "^0.26.0",
+    "dayjs": "^1.10.8",
     "iconoir-react": "^2.1.0",
     "ioredis": "^4.28.5",
     "next": "latest",
