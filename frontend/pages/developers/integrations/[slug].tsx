@@ -71,6 +71,7 @@ const DevelopersIntegrationsSlug: React.FC<{
   const [formError, setFormError] = React.useState<ErrorObject | null>(err)
   const [loading, setLoading] = React.useState<boolean>(false)
   const [clientSecret, setClientSecret] = React.useState<string | null>(secret)
+  const deleteIntgInput = React.useRef<HTMLInputElement>(null)
 
   React.useEffect(() => {
     // clear query string
@@ -287,6 +288,49 @@ const DevelopersIntegrationsSlug: React.FC<{
             </div>
           ))}
         </div>
+        <h2 className="mt-12 mb-4 text-3xl font-medium">Delete integration</h2>
+        <p className="my-4 text-lg">
+          This action is <strong>IRREVERSIBLE</strong> and we can not guarantee
+          that all users who are using this integration will stop sending
+          requests to the current base URL. To continue, please enter your
+          integration's ID (
+          <span className="font-mono brightness-90">{integration.id}</span>)
+          below:
+        </p>
+        <input
+          type="text"
+          className="w-[80%] rounded border border-gray-700 bg-gray-600 px-2 py-1 font-mono text-white outline-none focus:border-gray-300"
+          required
+          id="addUrl"
+          name="addUrl"
+          placeholder={integration.id}
+          ref={deleteIntgInput}
+        />
+        <p className="flex items-center justify-between text-2xl font-medium">
+          <span className="text-sm uppercase text-error">
+            This action is IRREVERSIBLE
+          </span>
+          <a
+            href={`/api/developers/integrations/${intg.id}/delete?redirect=%2Fdevelopers`}
+            className="button bg-error text-base font-normal"
+            onClick={(e) => {
+              e.preventDefault()
+              if (deleteIntgInput.current?.value !== intg.id) {
+                alert('Please enter the correct ID in the input field.')
+              } else {
+                if (
+                  confirm(
+                    'Are you sure you want to delete this integration? This is the last warning.'
+                  )
+                ) {
+                  window.location.href = `/api/developers/integrations/${intg.id}/delete?redirect=%2Fdevelopers`
+                }
+              }
+            }}
+          >
+            <Trash /> Delete
+          </a>
+        </p>
       </div>
     </React.Fragment>
   )

@@ -73,6 +73,12 @@ export const developers = {
           headers: { Authorization: `Bearer ${token}` },
         })
       ),
+    delete: (token: string, id: string) =>
+      request<{ integration: Integration }>(() =>
+        axios.delete('/api/developers/integrations/' + id, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+      ),
     credentials: {
       create: (token: string, id: string) =>
         request<{ credentials: Credential; secret: string }>(() =>
