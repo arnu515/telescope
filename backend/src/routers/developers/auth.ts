@@ -31,7 +31,12 @@ export function devAuth(authRequired = true) {
 		const token = req.headers.authorization?.split(" ")?.[1]
 		if (!token) {
 			if (authRequired) {
-				return res.status(401).json({ message: "Unauthorized" })
+				return res
+					.status(401)
+					.json({
+						error: "Unauthorized",
+						error_description: "Token not present in header"
+					})
 			}
 			return next()
 		}
@@ -40,7 +45,9 @@ export function devAuth(authRequired = true) {
 
 		if (!dev) {
 			if (authRequired) {
-				return res.status(401).json({ message: "Unauthorized" })
+				return res
+					.status(401)
+					.json({ error: "Unauthorized", error_description: "Invalid token" })
 			}
 			return next()
 		}
