@@ -67,6 +67,27 @@ export const developers = {
           headers: { Authorization: `Bearer ${token}` },
         })
       ),
+    credentials: {
+      create: (token: string, id: string) =>
+        request<{ credentials: Credential; secret: string }>(() =>
+          axios.post(
+            '/api/developers/integrations/' + id + '/credentials',
+            {},
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+        ),
+      delete: (token: string, id: string, credId: string) =>
+        request<{ credentials: Credential; secret: string }>(() =>
+          axios.delete(
+            '/api/developers/integrations/' + id + '/credentials/' + credId,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          )
+        ),
+    },
   },
 }
 

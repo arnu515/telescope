@@ -2,11 +2,17 @@ import { GetServerSideProps } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import ErrorAlert from '../../../lib/components/ErrorAlert'
-import { ErrorObject } from '../../../lib/util/types'
+import {
+  Developer,
+  ErrorObject,
+  IntegrationCredentials,
+} from '../../../lib/util/types'
 import { getSession } from '../../../lib/session'
 import api from '../../../lib/util/api'
 import { handleForm } from '../../../lib/util/form'
 import { Integration } from '../../../lib/util/types'
+import { Plus, Trash } from 'iconoir-react'
+import dayjs from 'dayjs'
 
 export const getServerSideProps: GetServerSideProps = async ({
   req,
@@ -30,12 +36,19 @@ export const getServerSideProps: GetServerSideProps = async ({
     } as ErrorObject
   }
 
+  const secret = typeof query.secret === 'string' ? query.secret : null
+
   try {
     const integration =
       (await api.developers.integrations.one(session.token, params.slug)).data
         ?.integration ?? null
     return {
-      props: { dev: session.dev ?? null, integration: integration, err },
+      props: {
+        dev: session.dev ?? null,
+        integration: integration,
+        err,
+        secret,
+      },
     }
   } catch (e) {
     console.log(e)
@@ -47,12 +60,22 @@ export const getServerSideProps: GetServerSideProps = async ({
 }
 
 const DevelopersIntegrationsSlug: React.FC<{
-  integration: Integration
+  integration: Integration & {
+    owner: Developer
+    credentials: IntegrationCredentials[]
+  }
   err?: ErrorObject
-}> = ({ integration: intg, err = null }) => {
+  secret: string | null
+}> = ({ integration: intg, err = null, secret }) => {
   const [integration, setIntegration] = React.useState(intg)
   const [formError, setFormError] = React.useState<ErrorObject | null>(err)
   const [loading, setLoading] = React.useState<boolean>(false)
+  const [clientSecret, setClientSecret] = React.useState<string | null>(secret)
+
+  React.useEffect(() => {
+    // clear query string
+    window.history.replaceState({}, '', `/developers/integrations/${intg.id}`)
+  }, [])
 
   async function saveIntegration(fd: FormData) {
     const integration: any = {}
@@ -108,7 +131,11 @@ const DevelopersIntegrationsSlug: React.FC<{
           </p>
 
           <h2 className="my-4 text-3xl font-medium">Basic information</h2>
-          <ErrorAlert error={formError ?? undefined} />
+          <ErrorAlert
+            error={formError ?? undefined}
+            dismissable
+            onDismiss={() => setFormError(null)}
+          />
           <div className="mt-12">
             <p className="mt-4">
               {/* TODO: Extract these to a class (maybe a component) */}
@@ -202,6 +229,60 @@ const DevelopersIntegrationsSlug: React.FC<{
             </p>
           </div>
         </form>
+        <h2 className="mt-8 mb-4 text-3xl font-medium">Credentials</h2>
+        <p className="my-4 text-xl font-medium">
+          Key:{' '}
+          <span className="font-mono text-gray-400">{integration.key}</span>
+        </p>
+        <h3 className="my-4 text-2xl">Client credentials</h3>
+        <p className="my-4 text-lg">
+          Use these credentials to interact with the Telescope API
+        </p>
+        {clientSecret && (
+          <div className="my-4 rounded border border-white bg-success px-3 py-1 text-white">
+            Your client secret is{' '}
+            <strong className="font-mono font-medium brightness-90">
+              {clientSecret}
+            </strong>
+            . It won't be displayed again.
+          </div>
+        )}
+        <div className="my-4 mx-auto flex max-w-screen-lg flex-col gap-4 py-12">
+          <div className="flex flex-col gap-2 rounded-xl bg-[#333] px-8 py-4">
+            <p className="flex items-center justify-between text-2xl font-medium">
+              Create credentials
+              <a
+                href={`/api/developers/integrations/${intg.id}/credentials?redirect=%2Fdevelopers%2Fintegrations%2F${intg.id}`}
+                className="button bg-success text-base font-normal"
+              >
+                <Plus /> Create
+              </a>
+            </p>
+          </div>
+          {integration.credentials.map((c) => (
+            <div
+              key={c.id}
+              className="flex flex-col gap-2 rounded-xl bg-[#333] px-8 py-4"
+            >
+              <p className="flex items-center justify-between text-2xl font-medium">
+                <span className="text-medium font-mono">{c.id}</span>
+                <a
+                  href={`/api/developers/integrations/${intg.id}/credentials?id=${c.id}&redirect=%2Fdevelopers%2Fintegrations%2F${intg.id}`}
+                  className="button bg-error text-base font-normal"
+                >
+                  <Trash /> Delete
+                </a>
+              </p>
+              <p className="mt-2 flex items-center justify-between text-lg">
+                <span className="font-mono">{c.uses} uses</span>
+                <span className="text-gray-500">
+                  Created on{' '}
+                  {dayjs(integration.createdAt).format('YYYY, MMM DD')}
+                </span>
+              </p>
+            </div>
+          ))}
+        </div>
       </div>
     </React.Fragment>
   )
