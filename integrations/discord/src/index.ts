@@ -343,6 +343,15 @@ serve(async (req) => {
     res = json({ message: "Pong" });
   } else if (url.pathname === "/auth") {
     res = await authHandler(req);
+  } else if (url.pathname === "/add") {
+    res = new Response(undefined, {
+      headers: {
+        location: `https://discord.com/api/oauth2/authorize?client_id=${
+          Deno.env.get("DISCORD_CLIENT_ID")
+        }&scope=applications.commands`,
+      },
+      status: 302,
+    });
   } else {
     res = json({ error: "Not found", error_description: "Route not found" }, {
       status: 404,
