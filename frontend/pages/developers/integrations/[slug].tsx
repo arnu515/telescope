@@ -145,6 +145,8 @@ const DevelopersIntegrationsSlug: React.FC<{
               <input
                 type="text"
                 className="w-[80%] rounded border border-gray-700 bg-gray-600 px-2 py-1 font-mono text-white outline-none focus:border-gray-300"
+                required
+                maxLength={255}
                 defaultValue={integration.name}
                 id="name"
                 name="name"
@@ -180,6 +182,7 @@ const DevelopersIntegrationsSlug: React.FC<{
               <input
                 type="url"
                 className="w-[80%] rounded border border-gray-700 bg-gray-600 px-2 py-1 font-mono text-white outline-none focus:border-gray-300"
+                required
                 defaultValue={integration.baseUrl}
                 id="baseUrl"
                 name="baseUrl"
@@ -198,6 +201,7 @@ const DevelopersIntegrationsSlug: React.FC<{
               <input
                 type="text"
                 className="w-[80%] rounded border border-gray-700 bg-gray-600 px-2 py-1 font-mono text-white outline-none focus:border-gray-300"
+                required
                 defaultValue={integration.addUrl}
                 id="addUrl"
                 name="addUrl"
