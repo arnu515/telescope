@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from "express"
-import qs from "qs"
+import qs, { stringify } from "qs"
 import redis from "../../lib/redis"
 import { nanoid } from "nanoid"
 import joi from "joi"
@@ -31,7 +31,12 @@ export function devAuth(authRequired = true) {
 		const token = req.headers.authorization?.split(" ")?.[1]
 		if (!token) {
 			if (authRequired) {
-				return res.status(401).json({ message: "Unauthorized" })
+				return res
+					.status(401)
+					.json({
+						error: "Unauthorized",
+						error_description: "Token not present in header"
+					})
 			}
 			return next()
 		}
@@ -40,7 +45,9 @@ export function devAuth(authRequired = true) {
 
 		if (!dev) {
 			if (authRequired) {
-				return res.status(401).json({ message: "Unauthorized" })
+				return res
+					.status(401)
+					.json({ error: "Unauthorized", error_description: "Invalid token" })
 			}
 			return next()
 		}
@@ -188,7 +195,7 @@ router.get("/github/callback", async (req, res) => {
 
 	const token = await createToken(dev)
 
-	res.status(200).json({ dev, token })
+	res.redirect(process.env.APP_URL + "/developers/auth?" + stringify({ token }))
 })
 
 router.get("/me", devAuth(), (req, res) => {
