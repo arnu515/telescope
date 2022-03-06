@@ -186,14 +186,56 @@ router.all("/calls/:id/auth", integrationAuth(), async (req, res) => {
 	await redis.hset(
 		"call:auth",
 		crypto.createHash("sha256").update(auth_token).digest("hex"),
-		call.id
+		JSON.stringify({ id: call.id, ...value })
 	)
 
 	res.json({
-		url:
-			`${process.env.APP_URL}/calls/${call.id}?` +
-			stringify({ ...value, auth_token })
+		url: `${process.env.APP_URL}/calls/${call.id}?` + stringify({ auth_token })
 	})
+})
+
+router.get("/calls/:id/tokendata", async (req, res) => {
+	const call = await getCall(req.params.id)
+
+	if (!call) {
+		res.status(404).json({
+			error: "Call not found",
+			error_description: "This call could not be found"
+		})
+		return
+	}
+
+	const token = req.headers["authorization"]?.split?.(" ")?.[1]
+	if (!token) {
+		res.status(404).json({
+			error: "Token not found",
+			error_description: "This token could not be found"
+		})
+		return
+	}
+
+	try {
+		const data = JSON.parse(
+			(await redis.hget(
+				"call:auth",
+				crypto.createHash("sha256").update(token).digest("hex")
+			)) || ""
+		)
+		if (!data) throw new Error()
+		await redis.hdel(
+			"call:auth",
+			crypto.createHash("sha256").update(token).digest("hex")
+		)
+		res.json({
+			data
+		})
+	} catch {
+		res.status(404).json({
+			error: "Token not found",
+			error_description: "This token could not be found"
+		})
+		return
+	}
 })
 
 router.post("/calls/create", integrationAuth(), async (req, res) => {
