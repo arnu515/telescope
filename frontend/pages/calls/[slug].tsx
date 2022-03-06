@@ -78,6 +78,11 @@ const CallsSlug: React.FC<{
 	error,
 	error_description
 }) => {
+	React.useEffect(() => {
+		// clear query string
+		window.history.replaceState({}, document.title, window.location.pathname)
+	}, [])
+
 	if (!isSupported)
 		return (
 			<div className="mx-auto max-w-screen-lg py-12">
