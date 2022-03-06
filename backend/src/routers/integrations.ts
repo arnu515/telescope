@@ -109,6 +109,14 @@ router.all("/calls/:id/error", integrationAuth(), async (req, res) => {
 		return
 	}
 
+	if ((req as any).integration?.id !== call.integrationId) {
+		res.status(403).json({
+			error: "Forbidden",
+			error_description: "This call was not created by this integration"
+		})
+		return
+	}
+
 	const { error: e, value } = joi
 		.object({
 			error: joi.string().required(),
@@ -140,6 +148,14 @@ router.all("/calls/:id/auth", integrationAuth(), async (req, res) => {
 		res.status(404).json({
 			error: "Call not found",
 			error_description: "This call could not be found"
+		})
+		return
+	}
+
+	if ((req as any).integration?.id !== call.integrationId) {
+		res.status(403).json({
+			error: "Forbidden",
+			error_description: "This call was not created by this integration"
 		})
 		return
 	}
