@@ -5,6 +5,7 @@ import joi from "joi"
 import { stringify } from "qs"
 import { customAlphabet } from "nanoid"
 import redis from "../lib/redis"
+import twilio from "../lib/twilio"
 import crypto from "crypto"
 
 const router = Router()
@@ -67,11 +68,17 @@ async function getCall(id?: string) {
 		return null
 	}
 
-	if (call.expiresAt && call.expiresAt < new Date()) {
+	try {
+		const room = await twilio.video.rooms.get(call.roomSid).fetch()
+		console.log({ room })
+	} catch (e) {
+		console.log(e)
+		// delete call because room has expired
 		await prisma.call.delete({
-			where: { id: call.id }
+			where: {
+				id
+			}
 		})
-		return null
 	}
 
 	return call
@@ -192,17 +199,22 @@ router.post("/calls/create", integrationAuth(), async (req, res) => {
 
 	const { toId, fromId, data } = value
 
+	const room = await twilio.video.rooms.create({
+		emptyRoomTimeout: 15,
+		unusedRoomTimeout: 15
+	})
+
 	const call = await prisma.call.create({
 		data: {
 			toId,
 			fromId,
 			integrationData: data,
+			roomSid: room.sid,
 			integration: {
 				connect: {
 					id: (req as any).integration.id
 				}
-			},
-			expiresAt: new Date(Date.now() + 1000 * 60 * 15)
+			}
 		}
 	})
 
