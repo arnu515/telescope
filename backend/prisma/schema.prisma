@@ -54,14 +54,13 @@ model IntegrationCredentials {
 }
 
 model Call {
-  id              String    @id @default(cuid())
-  fromId          String    @map("from_id")
-  toId            String    @map("to_id")
-  integrationId   String    @map("integration_id")
-  integrationData Json      @map("data")
-  createdAt       DateTime  @default(now()) @map("created_at")
-  isActive        Boolean   @default(false) @map("is_active")
-  expiresAt       DateTime? @map("expires_at")
+  id              String   @id @default(cuid())
+  fromId          String   @map("from_id")
+  toId            String   @map("to_id")
+  integrationId   String   @map("integration_id")
+  integrationData Json     @map("data")
+  roomSid         String   @map("room_sid")
+  createdAt       DateTime @default(now()) @map("created_at")
 
   integration Integration @relation(name: "IntegrationCalls", fields: [integrationId], references: [id])
 
