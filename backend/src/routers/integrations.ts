@@ -225,10 +225,6 @@ router.get("/calls/:id/tokendata", async (req, res) => {
 			)) || ""
 		)
 		if (!data) throw new Error()
-		await redis.hdel(
-			"call:auth",
-			crypto.createHash("sha256").update(token).digest("hex")
-		)
 		res.json({
 			data
 		})
