@@ -61,6 +61,9 @@ async function getCall(id?: string) {
 	const call = await prisma.call.findUnique({
 		where: {
 			id
+		},
+		include: {
+			integration: true
 		}
 	})
 
