@@ -14,7 +14,7 @@ const Index: React.FC = () => {
 						<Link href="/integrations">
 							<a className="button mr-4 bg-success">Explore integrations</a>
 						</Link>
-						<Link href="/meeting">
+						<Link href="/calls">
 							<a className="button bg-gray-500">Connect to a call</a>
 						</Link>
 					</p>

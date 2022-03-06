@@ -109,6 +109,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@twilio/webrtc@4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@twilio/webrtc/-/webrtc-4.5.2.tgz#9e3fd548f942d45f983268bd965d67da66484e9d"
+  integrity sha512-UPcepsAosWCnKvao28G+ErYX/ZLNqKKd9OzJx1LZ1DGkDyKRg2pHSO0PJ0bCMf7pu3Kv5ns0DYwxX3XCT6ZIlw==
+
 "@types/ioredis@^4.28.8":
   version "4.28.8"
   resolved "https://registry.yarnpkg.com/@types/ioredis/-/ioredis-4.28.8.tgz#a181d6eb70e402a6db670fe54b9c5bb66c0fac17"
@@ -219,6 +224,13 @@ axios@^0.26.0:
   integrity sha512-lKoGLMYtHvFrPVt3r+RBMp9nh34N0M8zEfCWqdWZx6phynIEhQqAdydpyBAAG211zlhX9Rgu08cOamy6XjE5Og==
   dependencies:
     follow-redirects "^1.14.8"
+
+backoff@^2.5.0:
+  version "2.5.0"
+  resolved "https://registry.yarnpkg.com/backoff/-/backoff-2.5.0.tgz#f616eda9d3e4b66b8ca7fca79f695722c5f8e26f"
+  integrity sha1-9hbtqdPktmuMp/ynn2lXIsX44m8=
+  dependencies:
+    precond "0.2"
 
 binary-extensions@^2.0.0:
   version "2.2.0"
@@ -366,6 +378,11 @@ denque@^1.1.0:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/denque/-/denque-1.5.1.tgz#07f670e29c9a78f8faecb2566a1e2c11929c5cbf"
   integrity sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw==
+
+detect-browser@^5.3.0:
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-5.3.0.tgz#9705ef2bddf46072d0f7265a1fe300e36fe7ceca"
+  integrity sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w==
 
 detective@^5.2.0:
   version "5.2.0"
@@ -771,6 +788,11 @@ postcss@^8.4.5, postcss@^8.4.6:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
+precond@0.2:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/precond/-/precond-0.2.3.tgz#aa9591bcaa24923f1e0f4849d240f47efc1075ac"
+  integrity sha1-qpWRvKokkj8eD0hJ0kD0fvwQdaw=
+
 prettier-plugin-tailwindcss@^0.1.1:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/prettier-plugin-tailwindcss/-/prettier-plugin-tailwindcss-0.1.8.tgz#ba0f606ed91959ede670303d905b99106e9e6293"
@@ -934,6 +956,16 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
+twilio-video@^2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/twilio-video/-/twilio-video-2.20.1.tgz#391a311621ccc5d904eaa5b228e6c967edd19763"
+  integrity sha512-fxQeW5gCEt6r6NxsRgA7RgjaytXLjuLKey/Hio1P5Nmqkw6s+c+XHACIOpWhgX4M68FV0i3qwvHCO+YMQVyyrw==
+  dependencies:
+    "@twilio/webrtc" "4.5.2"
+    backoff "^2.5.0"
+    ws "^7.4.6"
+    xmlhttprequest "^1.8.0"
+
 typescript@4.5.4:
   version "4.5.4"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
@@ -950,6 +982,16 @@ util-deprecate@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/util-deprecate/-/util-deprecate-1.0.2.tgz#450d4dc9fa70de732762fbd2d4a28981419a0ccf"
   integrity sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=
+
+ws@^7.4.6:
+  version "7.5.7"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.5.7.tgz#9e0ac77ee50af70d58326ecff7e85eb3fa375e67"
+  integrity sha512-KMvVuFzpKBuiIXW3E4u3mySRO2/mCHSyZDJQM5NQ9Q9KHWHWh0NHgfbRMLLrceUK5qAL4ytALJbpRMjixFZh8A==
+
+xmlhttprequest@^1.8.0:
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/xmlhttprequest/-/xmlhttprequest-1.8.0.tgz#67fe075c5c24fef39f9d65f5f7b7fe75171968fc"
+  integrity sha1-Z/4HXFwk/vOfnWX197f+dRcZaPw=
 
 xtend@^4.0.2:
   version "4.0.2"

@@ -30,7 +30,7 @@ const IntegrationsIndex: React.FC<{ integrations: Integration[] }> = ({
 					<Link href="/">
 						<a className="button mr-4 bg-success">Homepage</a>
 					</Link>
-					<Link href="/meeting">
+					<Link href="/calls">
 						<a className="button bg-gray-500">Connect to a call</a>
 					</Link>
 				</p>

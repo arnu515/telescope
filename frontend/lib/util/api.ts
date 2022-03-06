@@ -1,6 +1,6 @@
 import axios from "./axios"
 import type { AxiosResponse } from "axios"
-import { Developer, Integration } from "./types"
+import { Call, Developer, Integration } from "./types"
 
 export class FetchError extends Error {
 	constructor(
@@ -38,7 +38,19 @@ export const integrations = {
 	publicOne: (id: string) =>
 		request<{ integration: Integration }>(() =>
 			axios.get(`/api/integrations/public/${id}`)
-		)
+		),
+	calls: {
+		one: (id: string) =>
+			request<{ call: Call & { integration: Integration } }>(() =>
+				axios.get("/api/integrations/calls/" + id)
+			),
+		getTokenData: (id: string, token: string) =>
+			request<{ data: { nickname: string; avatarUrl: string } }>(() =>
+				axios.get("/api/integrations/calls/" + id + "/tokendata", {
+					headers: { authorization: "token " + token }
+				})
+			)
+	}
 }
 
 export const developers = {

@@ -34,8 +34,7 @@ export type Call = {
 	integrationId: string
 	integrationData: Record<string, any>
 	createdAt: Date
-	isActive: boolean
-	expiresAt: Date | null
+	roomSid: string
 }
 
 export interface ErrorObject {
