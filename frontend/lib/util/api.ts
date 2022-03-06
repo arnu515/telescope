@@ -41,7 +41,13 @@ export const integrations = {
 		),
 	calls: {
 		one: (id: string) =>
-			request<{ call: Call }>(() => axios.get("/api/integrations/calls/" + id))
+			request<{ call: Call }>(() => axios.get("/api/integrations/calls/" + id)),
+		getTokenData: (id: string, token: string) =>
+			request<{ data: { nickname: string; avatarUrl: string } }>(() =>
+				axios.get("/api/integrations/calls/" + id + "/tokendata", {
+					headers: { authorization: "token " + token }
+				})
+			)
 	}
 }
 
