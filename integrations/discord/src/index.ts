@@ -123,11 +123,11 @@ const callCommand = async (body: Record<string, any>) => {
             title: "Call placed",
             description:
               `The call has been placed between <@${fromId}> and <@${toId}>`,
-            url: "https://telescope.gq/calls/" + call.id,
+            url: "https://telescope.ml/calls/" + call.id,
             fields: [
               {
                 name: "Call URL",
-                value: "https://telescope.gq/calls/" + call.id,
+                value: "https://telescope.ml/calls/" + call.id,
                 inline: true,
               },
             ],
