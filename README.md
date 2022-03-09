@@ -22,3 +22,5 @@ Instructions for using the Discord integration:
 - Once that's done, simply type `/call` in the message box and mention a user to create a telescope call.
 - Both users can open the link after which they'll be asked to log in to discord to verify that they have access to join the call.
 - Once in, the call takes place peer-to-peer end-to-end encrypted.
+
+Demo video: https://vimeo.com/686124422
