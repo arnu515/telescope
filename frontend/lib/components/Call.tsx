@@ -260,8 +260,8 @@ const Call: React.FC<{ token: string }> = ({ token }) => {
 				<button
 					className="button bg-error"
 					onClick={leaveMeeting}
-					title="Copy meeting link"
-					aria-label="Copy meeting link"
+					title="Leave meeting"
+					aria-label="Leave meeting"
 				>
 					<PhoneDisabled />
 				</button>
