@@ -1,0 +1,11 @@
+Your telescope meeting has been created.
+
+You have invited <%= to %> to this meeting.
+
+To join the meeting, copy-paste the below link in your browser:
+
+<%= link %>
+
+This meeting will expire in fifteen minutes if nobody joins.
+
+Telescope

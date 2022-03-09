@@ -1,0 +1,13 @@
+You have been invited to a telescope meeting!
+
+Telescope is a peer-to-peer end-to-end encrypted meeting software that integrates everywhere.
+
+You have been invited to this meeting by <%= from %>.
+
+To join the meeting, copy-paste the below link in your browser:
+
+<%= link %>
+
+This meeting will expire in fifteen minutes if nobody joins.
+
+Telescope
