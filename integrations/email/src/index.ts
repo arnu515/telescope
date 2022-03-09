@@ -63,8 +63,8 @@ async function addHandler(req: Request): Promise<Response> {
     return sendEjs(
       "templates/add.html",
       {
-        from: body.get("from")!,
-        to: body.get("to")!,
+        from: body.get("from") || "",
+        to: body.get("to") || "",
         error,
         success: "",
       },
@@ -146,6 +146,105 @@ async function addHandler(req: Request): Promise<Response> {
   });
 }
 
+async function authHandler(req: Request) {
+  if (req.method !== "POST") {
+    return await sendEjs("templates/auth.html", {
+      to: "",
+      error: "Method not allowed",
+      success: "",
+      call_id: "",
+      key: "",
+    }, {
+      status: 405,
+    });
+  }
+
+  if (req.headers.get("content-type") !== "application/x-www-form-urlencoded") {
+    return await sendEjs("templates/auth.html", {
+      to: "",
+      error: "Invalid request",
+      success: "",
+      call_id: "",
+      key: "",
+    }, {
+      status: 422,
+    });
+  }
+
+  const body = new URLSearchParams(await req.text());
+
+  function sendError(error: string) {
+    return sendEjs(
+      "templates/auth.html",
+      {
+        to: body.get("to") || "",
+        error,
+        success: "",
+        call_id: body.get("call_id") || "",
+        key: body.get("key") || "",
+      },
+    );
+  }
+
+  const to = body.get("to");
+  const call_id = body.get("call_id");
+  const key = body.get("key");
+
+  if (typeof to !== "string" || !to.trim()) {
+    return sendError("To email is required");
+  }
+  if (typeof call_id !== "string" || !call_id.trim()) {
+    return sendError("call_id is required");
+  }
+  if (typeof key !== "string" || !key.trim()) {
+    return sendError("key is required");
+  }
+  if (!/\S+@\S+\.\S+/.test(to)) {
+    return sendError("To email is not a valid email");
+  }
+  if (key !== telescope.opts.key) {
+    return sendError("Invalid request");
+  }
+
+  const call = await telescope.getCall(call_id);
+
+  if (call.toId !== to.trim() && call.fromId !== to.trim()) {
+    return sendError("You are not invited to this meeting");
+  }
+
+  const toAuthUrl = await telescope.getAuthUrl(call.id, {
+    nickname: to.trim(),
+    avatarUrl: `https://gravatar.com/avatar/${
+      new Md5().update(to.trim()).toString("hex")
+    }?d=mp&s=64`,
+  });
+  const __dirname = new URL(".", import.meta.url).pathname;
+
+  await sendEmail({
+    email: to.trim(),
+    html: await renderToString(
+      new TextDecoder().decode(
+        Deno.readFileSync(join(__dirname, "templates/meeting-email-from.html")),
+      ),
+      { to: to.trim(), link: toAuthUrl },
+    ),
+    text: await renderToString(
+      new TextDecoder().decode(
+        Deno.readFileSync(join(__dirname, "templates/meeting-email-from.txt")),
+      ),
+      { to: to.trim(), link: toAuthUrl },
+    ),
+  });
+
+  return sendEjs("templates/auth.html", {
+    success: "true",
+    error: "",
+    to: "",
+    call_id: body.get("call_id") || "",
+    key: body.get("key") || "",
+  });
+}
+
 const port = parseInt(Deno.env.get("PORT") || "8000");
 console.log("Starting server on port: " + port);
 serve(async (req) => {
@@ -164,6 +263,35 @@ serve(async (req) => {
         success: "",
       });
     } else res = await addHandler(req);
+  } else if (url.pathname === "/auth") {
+    if (req.method === "GET") {
+      const query = new URL(req.url).searchParams;
+      if (typeof query.get("call_id") !== "string") {
+        res = await sendEjs("templates/auth.html", {
+          to: "",
+          error: "Call ID is not present in query string",
+          success: "",
+          call_id: "",
+          key: "",
+        });
+      } else if (typeof query.get("key") !== "string") {
+        res = await sendEjs("templates/auth.html", {
+          to: "",
+          error: "Invalid key in query string",
+          success: "",
+          call_id: "",
+          key: "",
+        });
+      } else {
+        res = await sendEjs("templates/auth.html", {
+          to: "",
+          error: "",
+          success: "",
+          call_id: query.get("call_id"),
+          key: query.get("key"),
+        });
+      }
+    } else res = await authHandler(req);
   } else {
     res = json({ error: "Not found", error_description: "Route not found" }, {
       status: 404,
